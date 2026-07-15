@@ -11,8 +11,21 @@
     * { box-sizing:border-box; }
     html { scroll-behavior:smooth; }
     body { margin:0; color:var(--ink); background:#f9e5df; font-family:"Noto Serif SC","Songti SC",serif; overflow-x:hidden; }
+    body.intro-active { overflow:hidden; }
     .sky { position:fixed; inset:0; z-index:-3; background:radial-gradient(circle at 14% 10%, #fff9ed 0 10%,transparent 28%), radial-gradient(circle at 90% 72%,#f3b7b9 0,transparent 28%), linear-gradient(135deg,#fbe6df 0%,#f9e8dc 52%,#eecbd0 100%); }
     .noise { position:fixed; inset:0; z-index:-2; opacity:.22; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E"); }
+    .intro { position:fixed; inset:0; z-index:20; display:grid; place-items:center; overflow:hidden; background:radial-gradient(circle at 50% 118%,#3f193b 0,transparent 45%), linear-gradient(160deg,#090b1a 0%,#1a1028 58%,#3e1734 100%); color:#fff9ec; cursor:pointer; }
+    .intro.done { animation:intro-out 1.15s ease forwards; pointer-events:none; }
+    @keyframes intro-out { to { opacity:0; visibility:hidden; } }
+    #fireworks { position:absolute; inset:0; width:100%; height:100%; }
+    .intro-copy { position:relative; z-index:1; width:min(90vw,720px); text-align:center; text-shadow:0 3px 20px #ff88ab83; }
+    .intro-copy .prelude { height:18px; margin:0 0 22px; color:#f8d59d; font-size:11px; letter-spacing:.36em; opacity:0; transition:opacity .5s; }
+    .intro-copy .prelude.visible { opacity:.92; }
+    #typewriter { min-height:3.35em; font-family:"Ma Shan Zheng","KaiTi",cursive; font-size:clamp(3.6rem,10vw,8rem); line-height:1.12; letter-spacing:.05em; }
+    #typewriter span { display:inline-block; }
+    .cursor { display:inline-block; width:3px; height:.7em; margin-left:8px; vertical-align:middle; background:#ffdf9d; box-shadow:0 0 12px #ffd889; animation:blink .75s step-end infinite; }
+    @keyframes blink { 50% { opacity:0; } }
+    .skip { position:absolute; z-index:1; bottom:29px; border:0; background:transparent; color:#ead8d8b8; font:12px "Noto Serif SC",serif; letter-spacing:.16em; cursor:pointer; }
     .petal { position:fixed; top:-40px; z-index:-1; width:15px; height:22px; border-radius:80% 20% 80% 20%; background:linear-gradient(135deg,#fff5f1,#e888a1); opacity:.75; animation:fall linear infinite; }
     @keyframes fall { to { transform:translate3d(var(--drift),110vh,0) rotate(500deg); } }
     .wrap { width:min(1030px, calc(100% - 36px)); margin:auto; }
@@ -22,6 +35,7 @@
     .hero { min-height:calc(100vh - 74px); display:grid; grid-template-columns:1.05fr .95fr; gap:42px; align-items:center; padding:30px 0 90px; }
     .eyebrow { color:var(--wine); font-size:13px; letter-spacing:.24em; margin-bottom:16px; }
     h1 { font-family:"Ma Shan Zheng","KaiTi",cursive; margin:0; font-size:clamp(3.7rem,9vw,7.5rem); line-height:.98; font-weight:400; color:#703044; }
+    .no-wrap { white-space:nowrap; }
     h1 em { font-style:normal; color:#db6e89; }
     .lead { width:min(410px,100%); margin:27px 0 29px; font-size:16px; line-height:2; }
     .lead b { color:var(--wine); font-weight:700; }
@@ -40,22 +54,35 @@
     .section { padding:100px 0; }
     .section-label { color:var(--wine); letter-spacing:.2em; font-size:12px; text-align:center; margin:0 0 13px; }
     h2 { margin:0 0 42px; text-align:center; font-family:"Ma Shan Zheng",cursive; font-size:clamp(2.5rem,5vw,4rem); font-weight:400; color:#703044; }
-    .timeline { position:relative; display:grid; grid-template-columns:1fr 1fr; gap:22px; }
-    .timeline:before { content:""; position:absolute; height:1px; background:#bb7185; left:15%; right:15%; top:50%; opacity:.6; }
-    .memory { position:relative; min-height:235px; padding:27px; background:#fffcf6cc; border:1px solid #e9c8c4; box-shadow:7px 8px 0 #d6999d35; }
-    .memory:nth-child(1) { transform:rotate(-2deg); }
-    .memory:nth-child(2) { transform:rotate(2deg); margin-top:76px; }
+    .timeline { position:relative; display:grid; gap:40px; max-width:780px; margin:auto; }
+    .timeline:before { content:""; position:absolute; width:1px; top:45px; bottom:45px; left:50%; background:#bb7185; opacity:.62; }
+    .memory { position:relative; width:calc(50% - 32px); min-height:280px; padding:30px; background:#fffcf6e8; border:1px solid #e9c8c4; box-shadow:8px 9px 0 #d6999d35; }
+    .memory:nth-child(odd) { justify-self:start; transform:rotate(-1.5deg); }
+    .memory:nth-child(even) { justify-self:end; transform:rotate(1.5deg); }
+    .memory:before { content:""; position:absolute; top:42px; width:13px; height:13px; border-radius:50%; background:#bf6276; box-shadow:0 0 0 5px #f9e5df; }
+    .memory:nth-child(odd):before { right:-40px; }.memory:nth-child(even):before { left:-40px; }
     .memory .month { display:inline-block; color:#fffaf6; background:#c76578; padding:4px 10px; font-size:12px; letter-spacing:.1em; }
-    .memory h3 { margin:21px 0 10px; color:#733549; font-size:22px; font-weight:600; }
-    .memory p { line-height:1.9; margin:0; font-size:14px; }
-    .doodle { position:absolute; right:21px; bottom:17px; color:#e08b98; font-family:"Ma Shan Zheng",cursive; font-size:54px; transform:rotate(-12deg); }
+    .memory h3 { margin:21px 0 11px; color:#733549; font-size:22px; font-weight:600; }
+    .memory p { line-height:1.95; margin:0; font-size:14px; }
+    .doodle { position:absolute; right:21px; bottom:14px; color:#e08b98; font-family:"Ma Shan Zheng",cursive; font-size:50px; transform:rotate(-12deg); }
     .wish { padding:96px 0; text-align:center; }
     .wish-box { position:relative; overflow:hidden; padding:60px min(8vw,88px); background:#7d374e; color:#fff7ed; box-shadow:14px 14px 0 #d58e9745; }
     .wish-box:before,.wish-box:after { content:""; position:absolute; width:210px; height:210px; border-radius:50%; border:1px solid #e6a0a666; }
     .wish-box:before{left:-115px;top:-100px}.wish-box:after{right:-115px;bottom:-130px}
     .wish h2 { color:#fff4e9; position:relative; margin-bottom:20px; }
     .wish p { position:relative; margin:0 auto 28px; max-width:600px; line-height:2; font-size:16px; }
-    .cake { position:relative; z-index:2; display:block; margin:0 auto 19px; font-size:56px; line-height:1; filter:drop-shadow(0 6px 5px #3e122d66); }
+    .cake-scene { position:relative; z-index:2; width:170px; height:138px; margin:0 auto 14px; cursor:pointer; filter:drop-shadow(0 7px 6px #3e122d66); }
+    .cake-plate { position:absolute; width:164px; height:18px; bottom:5px; left:3px; border-radius:50%; background:#f7dfbb; box-shadow:inset 0 -5px #dba77e; }
+    .cake-body { position:absolute; left:23px; bottom:17px; width:124px; height:61px; overflow:hidden; border-radius:9px 9px 21px 21px; background:repeating-linear-gradient(90deg,#ec8495 0 20px,#f49baa 20px 40px); box-shadow:inset 0 -8px #bc536f; }
+    .cake-icing { position:absolute; left:19px; bottom:65px; width:132px; height:26px; border-radius:18px 18px 8px 8px; background:#fff0dc; box-shadow:0 8px 0 -1px #fff0dc; }
+    .candle { position:absolute; z-index:1; bottom:85px; width:13px; height:39px; border-radius:4px 4px 1px 1px; background:repeating-linear-gradient(135deg,#ffdb6d 0 4px,#e97082 4px 8px); }
+    .candle.one { left:43px; height:34px; }.candle.two { left:79px; height:47px; }.candle.three { left:115px; height:35px; }
+    .flame { position:absolute; left:1px; bottom:36px; width:11px; height:17px; border-radius:60% 40% 55% 45%; background:linear-gradient(#fff9bd 0 35%,#ffbf51 60%,#ef6a4e); box-shadow:0 0 13px 4px #ffc04d99; transform-origin:bottom; animation:flicker .55s ease-in-out infinite alternate; }
+    .two .flame { bottom:47px; }.three .flame { bottom:36px; }
+    @keyframes flicker { to { transform:scale(.78,1.15) rotate(4deg); } }
+    .cake-scene.extinguished .flame { animation:out .55s ease forwards; }
+    @keyframes out { 60% { transform:translate(7px,-5px) scale(1.35,.4); opacity:.4; } 100% { opacity:0; transform:translate(10px,-8px) scale(0); } }
+    .smoke { position:absolute; opacity:0; bottom:120px; left:79px; color:#ddd0d5; font-size:23px; transition:1s; }.cake-scene.extinguished .smoke { opacity:.7; transform:translateY(-19px); }
     .open-button { position:relative; z-index:2; background:#f7ce86; color:#693047; box-shadow:none; }
     .open-button:hover { box-shadow:none; }
     footer { padding:22px 0 38px; color:#805267; text-align:center; font-size:12px; letter-spacing:.08em; }
@@ -69,10 +96,15 @@
     .card p { line-height:2; margin:0; }
     .confetti { position:fixed; z-index:8; width:9px; height:13px; pointer-events:none; animation:confetti 1.8s ease-out forwards; }
     @keyframes confetti { to { transform:translate(var(--x),var(--y)) rotate(720deg); opacity:0; } }
-    @media (max-width:680px) { .hero { grid-template-columns:1fr; gap:16px; padding-top:38px; } .scene { height:330px; max-width:390px; margin:auto; width:100%; } .timeline { grid-template-columns:1fr; } .timeline:before { height:auto; width:1px; top:13%; bottom:13%; left:50%; right:auto; } .memory:nth-child(2) { margin-top:12px; } .section { padding:70px 0; } .wish { padding:70px 0; } }
+    @media (max-width:680px) { .hero { grid-template-columns:1fr; gap:16px; padding-top:38px; } .scene { height:330px; max-width:390px; margin:auto; width:100%; } .timeline { gap:28px; padding-left:23px; } .timeline:before { left:6px; } .memory,.memory:nth-child(odd),.memory:nth-child(even) { width:100%; justify-self:auto; transform:none; } .memory:before,.memory:nth-child(odd):before,.memory:nth-child(even):before { left:-24px; right:auto; } .section { padding:70px 0; } .wish { padding:70px 0; } }
   </style>
 </head>
-<body>
+<body class="intro-active">
+  <section class="intro" id="intro" aria-label="生日祝福开场动画">
+    <canvas id="fireworks"></canvas>
+    <div class="intro-copy"><p class="prelude" id="prelude">A LITTLE CELEBRATION FOR YOU</p><div id="typewriter" aria-live="polite"></div></div>
+    <button class="skip" id="skip">跳过开场</button>
+  </section>
   <div class="sky"></div><div class="noise"></div>
   <i class="petal" style="left:8%;--drift:70px;animation-duration:12s"></i><i class="petal" style="left:25%;--drift:-55px;animation-duration:15s;animation-delay:-6s"></i><i class="petal" style="left:61%;--drift:58px;animation-duration:13s;animation-delay:-9s"></i><i class="petal" style="left:86%;--drift:-66px;animation-duration:16s;animation-delay:-4s"></i>
   <main class="wrap">
@@ -80,7 +112,7 @@
     <section class="hero">
       <div>
         <p class="eyebrow">TO MY FAVORITE PERSON</p>
-        <h1>生日快乐，<br><em>我的女孩</em></h1>
+        <h1><span class="no-wrap">生日快乐</span><br><em>我的女孩</em></h1>
         <p class="lead">今天的月亮、晚风和所有闪闪发亮的小事，都在替我说：<b>愿你新的一岁，永远被爱、被偏爱。</b></p>
         <a class="button" href="#letter">拆开这一份小心意 <span>→</span></a>
       </div>
@@ -92,23 +124,51 @@
     <section class="section" id="letter">
       <p class="section-label">OUR LITTLE STORY</p><h2>从春天，走到你的生日</h2>
       <div class="timeline">
-        <article class="memory"><span class="month">2026 / 04 / 18</span><h3>故事从这一天开始</h3><p>四月的风把我们推向彼此。从那天起，平凡的每一天都有了可以期待的理由。</p><span class="doodle">♡</span></article>
-        <article class="memory"><span class="month">2026 / 07 / 16</span><h3>今天，庆祝你的出现</h3><p>谢谢你成为你自己，也谢谢命运让我参与这段灿烂的旅程。往后的生日，都想在你身边。</p><span class="doodle">✿</span></article>
+        <article class="memory"><span class="month">2026 / 04 / 08</span><h3>初识</h3><p>是你的勇敢，让我们从陌生走向相知、相爱。我很庆幸你愿意向我走来，也很庆幸那个春天里，我们没有错过彼此。</p><span class="doodle">♡</span></article>
+        <article class="memory"><span class="month">2026 / 04 / 18</span><h3>故事正式开始</h3><p>你的陪伴让我感受到温暖，也让我知道原来被一个人认真放在心上，是这样踏实又幸福的事情。</p><span class="doodle">✿</span></article>
+        <article class="memory"><span class="month">2026 / 04 / 19</span><h3>在一起</h3><p>从这一天起，“我”和“你”有了新的名字——我们。平凡的日子也因为有了彼此，开始变得格外值得期待。</p><span class="doodle">∞</span></article>
+        <article class="memory"><span class="month">2026 / 05</span><h3>电话相伴的五月</h3><p>隔着听筒分享琐碎、交换心事。那些说不完的晚安和舍不得挂断的电话，慢慢把我们的心拉得更近。</p><span class="doodle">☏</span></article>
+        <article class="memory"><span class="month">2026 / 06</span><h3>越来越离不开彼此</h3><p>我们开始习惯在开心时第一个想到对方，也习惯在疲惫时，从对方那里得到安慰。原来爱就是一点一点，成为生活的一部分。</p><span class="doodle">♥</span></article>
+        <article class="memory"><span class="month">2026 / 07 / 16</span><h3>你的第一个生日</h3><p>今天，是我们一起度过的第一个生日，也是我的姑娘十几岁的最后一年。很幸运，能在你刚刚走进成年生活的第一年尾声遇见你；更幸运的是，往后的路，我也有机会陪你慢慢走下去。<br><br>新的一岁，愿你在学业里一点点找到自己的节奏：认真读过的每一页、熬过的每一个小难题，都会在未来悄悄开花。愿你所学皆有所获，所盼皆有回应，也愿你在忙碌时仍能保留好奇和热爱。你不必和任何人比较，只要比昨天的自己更勇敢一点，就已经很了不起。<br><br>愿你终会找到真正热爱的事，成为自己想成为的模样。可是在那之前，也请别急着长大，更别把压力都留给自己——累了就休息，开心就尽情笑，先好好享受这份只属于你的、闪闪发光的 19 岁吧。无论怎样，我都会在你身边，为你加油，也做你最坚实的后盾。</p><span class="doodle">19</span></article>
       </div>
     </section>
     <section class="wish">
-      <div class="wish-box"><span class="cake">🎂</span><p class="section-label" style="color:#f5c9ba">MAKE A WISH</p><h2>许一个愿吧</h2><p>愿你的笑容比蛋糕更甜，愿所有小小的愿望都能被认真回应。至于“永远陪着你”这个愿望，我已经开始努力实现了。</p><button class="button open-button" id="surprise">点亮生日惊喜 ✦</button></div>
+      <div class="wish-box">
+        <div class="cake-scene" id="cake" role="button" tabindex="0" aria-label="点击吹熄生日蜡烛"><span class="smoke">〰</span><div class="candle one"><i class="flame"></i></div><div class="candle two"><i class="flame"></i></div><div class="candle three"><i class="flame"></i></div><div class="cake-icing"></div><div class="cake-body"></div><div class="cake-plate"></div></div>
+        <p class="section-label" style="color:#f5c9ba">MAKE A WISH</p><h2 id="wish-title">许一个愿吧</h2><p id="wish-copy">愿你的笑容比蛋糕更甜，愿所有小小的愿望都能被认真回应。至于“永远陪着你”这个愿望，我已经开始努力实现了。</p><button class="button open-button" id="blow">许好愿后，对着麦克风吹一口气</button><button class="button open-button" id="surprise" style="display:none">点亮生日惊喜 ✦</button>
+      </div>
     </section>
     <footer>MADE WITH LOVE · 07 / 16 · 只属于你的这一页</footer>
   </main>
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="card"><button class="close" id="close" aria-label="关闭">×</button><div class="heart">♥</div><h3 id="modal-title">生日快乐！</h3><p>愿你在新的一岁里，依然自由、明亮、闪闪发光。<br>而我会一直在你身旁，爱你，比昨天更多一点。</p></div></div>
   <script>
+    const intro = document.getElementById('intro');
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    let particles = [], rockets = [], started = false, animationFrame, stopped = false;
+    const palette = ['#ffd77d','#ff7fa7','#a8dbff','#dba8ff','#ffb66f'];
+    function resizeCanvas(){ canvas.width=innerWidth*devicePixelRatio; canvas.height=innerHeight*devicePixelRatio; ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0); }
+    function burst(x,y){ const color=palette[Math.floor(Math.random()*palette.length)]; for(let i=0;i<72;i++){ const angle=Math.PI*2*i/72+(Math.random()-.5)*.08, speed=1.4+Math.random()*4.4; particles.push({x,y,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,life:1,color,size:1.2+Math.random()*1.7,gravity:.035}); } }
+    function launch(){ const x=innerWidth*(.16+Math.random()*.68), targetY=innerHeight*(.15+Math.random()*.36); rockets.push({x,y:innerHeight+20,targetY,vy:-(8+Math.random()*3),color:palette[Math.floor(Math.random()*palette.length)]}); }
+    function drawFireworks(){ if(stopped) return; ctx.fillStyle='rgba(9,8,22,.22)'; ctx.fillRect(0,0,innerWidth,innerHeight); rockets=rockets.filter(r=>{ r.y+=r.vy; ctx.fillStyle=r.color; ctx.fillRect(r.x,r.y,2,10); if(r.y<=r.targetY){burst(r.x,r.y);return false;} return true; }); particles=particles.filter(p=>{ p.x+=p.vx;p.y+=p.vy;p.vx*=.985;p.vy=p.vy*.985+p.gravity;p.life-=.014;ctx.globalAlpha=Math.max(p.life,0);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;return p.life>0; }); animationFrame=requestAnimationFrame(drawFireworks); }
+    function typeLine(text, target, delay=0){ return new Promise(resolve=>{ setTimeout(()=>{ let i=0; const timer=setInterval(()=>{ const char=document.createElement('span'); char.textContent=text[i++]; target.appendChild(char); if(i===text.length){clearInterval(timer);resolve();} },180); },delay); }); }
+    function resetScroll(){ window.scrollTo(0,0); document.documentElement.scrollTop=0; document.body.scrollTop=0; }
+    async function startIntro(){ if(started)return;started=true; if('scrollRestoration' in history)history.scrollRestoration='manual';resetScroll();requestAnimationFrame(resetScroll);resizeCanvas();drawFireworks();launch();setTimeout(launch,560);setTimeout(launch,1050);setTimeout(launch,1530);await new Promise(r=>setTimeout(r,1400));document.getElementById('prelude').classList.add('visible');const box=document.getElementById('typewriter');await typeLine('生日快乐',box);box.appendChild(document.createElement('br'));await typeLine('我的女孩',box,280);box.appendChild(document.createElement('br'));await typeLine('赖筱妍',box,280);const cursor=document.createElement('i');cursor.className='cursor';box.appendChild(cursor);setTimeout(finishIntro,1800); }
+    function finishIntro(){ if(stopped)return;stopped=true;cancelAnimationFrame(animationFrame);resetScroll();intro.classList.add('done');document.body.classList.remove('intro-active');setTimeout(()=>intro.remove(),1200); }
+    addEventListener('resize',resizeCanvas);intro.addEventListener('click',finishIntro);document.getElementById('skip').addEventListener('click',e=>{e.stopPropagation();finishIntro();});startIntro();
+
     const modal = document.getElementById('modal');
     const colors = ['#f7ce86','#f3a2b0','#fff5d7','#b86578','#a4d6c6'];
     function burst() { for(let i=0;i<65;i++){ const p=document.createElement('i'); p.className='confetti'; const a=Math.random()*Math.PI*2, d=100+Math.random()*400; p.style.left='50%';p.style.top='50%';p.style.background=colors[i%colors.length];p.style.setProperty('--x',Math.cos(a)*d+'px');p.style.setProperty('--y',Math.sin(a)*d+'px');document.body.appendChild(p);setTimeout(()=>p.remove(),1900); } }
     document.getElementById('surprise').addEventListener('click',()=>{modal.classList.add('show');burst();});
     document.getElementById('close').addEventListener('click',()=>modal.classList.remove('show'));
     modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('show')});
+
+    const cake = document.getElementById('cake'), blow = document.getElementById('blow');
+    let blown = false, micStream, soundLoop;
+    function extinguish(){ if(blown)return; blown=true; if(soundLoop)cancelAnimationFrame(soundLoop); if(micStream)micStream.getTracks().forEach(track=>track.stop()); cake.classList.add('extinguished'); blow.style.display='none'; document.getElementById('wish-title').textContent='愿望会实现的'; document.getElementById('wish-copy').textContent='生日快乐，赖筱妍。愿你的每一岁都像此刻的烛光一样明亮，也愿我有幸参与每一个关于你的以后。'; setTimeout(()=>{document.getElementById('surprise').style.display='inline-flex';burst();},720); }
+    async function listenForBlow(){ if(blown)return; if(!navigator.mediaDevices?.getUserMedia){ blow.textContent='点击蛋糕，吹熄蜡烛'; return; } try { blow.textContent='正在聆听… 对着麦克风吹一口气'; micStream=await navigator.mediaDevices.getUserMedia({audio:true}); const AudioApi=window.AudioContext||window.webkitAudioContext, audio=new AudioApi(), source=audio.createMediaStreamSource(micStream), analyser=audio.createAnalyser(); analyser.fftSize=512; const data=new Uint8Array(analyser.fftSize); source.connect(analyser); let loudFrames=0; function monitor(){ analyser.getByteTimeDomainData(data); let total=0; for(const sample of data) total+=Math.abs(sample-128); const volume=total/data.length; loudFrames=volume>11?loudFrames+1:Math.max(0,loudFrames-1); if(loudFrames>7){audio.close();extinguish();return;} soundLoop=requestAnimationFrame(monitor); } monitor(); } catch(e) { blow.textContent='点击蛋糕，吹熄蜡烛'; } }
+    blow.addEventListener('click',listenForBlow); cake.addEventListener('click',extinguish); cake.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();extinguish();}});
   </script>
 </body>
 </html>
